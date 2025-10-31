@@ -6,7 +6,7 @@
   <section class="hero-carousel">
     <div class="carousel-container">
 
-      <!-- Slide 1 -->
+      <!-- Slide 1  carrou-->
       <div class="carousel-slide active">
         <img src="assets/img/hero-bg.png" alt="<?= $translations['lab_demo'] ?>">
         <div class="carousel-content">
