@@ -3,8 +3,6 @@
 // Incluir este archivo donde necesites el footer
 // Asumiendo que tienes las traducciones cargadas en $translations
 ?>
-<!-- Font Awesome CDN -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-pap2Ccb68iIL+GJ9k4AK6Jz1kTFSzH+6+Z+ZyRR6uh+z3BzUB5RC2MTMxvZgMchc5Zxw4JYm7gh5t0XIlJr3sA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
 <!-- Footer -->
 <footer>

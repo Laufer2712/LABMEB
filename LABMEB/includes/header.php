@@ -10,6 +10,8 @@ $page = basename($_SERVER['PHP_SELF']);
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>LABMEB</title>
 
+  <!-- Font Awesome para iconos -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   <!-- Favicon -->
   <link rel="icon" href="assets/img/logo.png" type="image/png">
 
