@@ -14,6 +14,10 @@ return [
     'hero_text_3'  => 'Soluções laboratoriais adaptadas às suas necessidades.',
     'learn_more'  => 'Ver mais',
 
+    //Search
+    'search_placeholder' => 'Buscar serviços, notícias, etc.',
+    'search_button' => 'Buscar',
+
     // FOOTER
     'welcome_title' => 'Bem-vindo ao LABMEB',
     'welcome_text' => 'Oferecemos soluções de laboratório e análise com tecnologia de ponta, em parceria direta com a CIQTEK.',

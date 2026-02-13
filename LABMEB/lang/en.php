@@ -14,6 +14,10 @@ return [
     'hero_text_3'  => 'Laboratory solutions tailored to your needs.',
     'learn_more'  => 'See more',
 
+    //Search
+    'search_placeholder' => 'Search services, news, etc.',
+    'search_button' => 'Search',
+
     // FOOTER
     'welcome_title' => 'Welcome to LABMEB',
     'welcome_text' => 'We offer laboratory and analysis solutions with cutting-edge technology, in direct partnership with CIQTEK.',

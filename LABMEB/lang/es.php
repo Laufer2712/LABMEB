@@ -21,6 +21,10 @@ return [
     'lab_mobile' => 'Laboratorio Móvil',
     'consulting' => 'Consultoría',
 
+    //Buscador
+    'search_placeholder' => 'Buscar servicios, noticias, etc.',
+    'search_button' => 'Buscar',
+
     // Footer links
     'quick_links' => 'Enlaces Rápidos',
     'services_footer' => 'Servicios',

@@ -65,6 +65,15 @@
     <p><?= $translations['welcome_text'] ?></p>
   </section>
 
+  <!-- Buscador Filtrado-->
+  <section class="search-section">
+    <div class="search-box">
+      <input type="text" id="searchInput" placeholder="<?= $translations['search_placeholder'] ?>">
+      <button id="searchButton"><?= $translations['search_button'] ?></button>
+    </div>
+
+    <div id="searchResults" class="search-results"></div>
+  </section>
   <!-- SERVICIOS DESTACADOS -->
   <section class="services-home">
     <div class="service-card">
@@ -128,6 +137,62 @@
     dots.forEach((dot, i) => dot.addEventListener('click', () => showSlide(i)));
 
     showSlide(0);
+  });
+</script>
+
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+
+    const input = document.getElementById('searchInput');
+    const button = document.getElementById('searchButton');
+    const container = document.getElementById('searchResults');
+
+    button.addEventListener('click', searchData);
+    input.addEventListener('keypress', function(e) {
+      if (e.key === 'Enter') searchData();
+    });
+
+    async function searchData() {
+      const query = input.value.trim();
+
+      if (!query) {
+        container.innerHTML = '';
+        return;
+      }
+
+      container.innerHTML = '<div class="no-results">Buscando...</div>';
+
+      try {
+        const response = await fetch('api/search.php?q=' + encodeURIComponent(query));
+        const data = await response.json();
+
+        container.innerHTML = '';
+
+        if (!data.length) {
+          container.innerHTML = '<div class="no-results">No se encontraron resultados.</div>';
+          return;
+        }
+
+        data.forEach(item => {
+          const card = document.createElement('div');
+          card.classList.add('result-card');
+
+          card.innerHTML = `
+    <h3>${item.institution_name || 'Sin institución'}</h3>
+    <p><strong>Laboratorio:</strong> ${item.laboratory_name || item.specialization || 'N/A'}</p>
+    <p><strong>Equipo:</strong> ${item.equipment_name || 'N/A'}</p>
+    <p><strong>Servicio:</strong> ${item.service_name || 'N/A'}</p>
+    <p><strong>País:</strong> ${item.country_name || 'N/A'}</p>
+  `;
+
+          container.appendChild(card);
+        });
+
+      } catch (error) {
+        container.innerHTML = '<div class="no-results">Error al consultar datos.</div>';
+      }
+    }
+
   });
 </script>
 
