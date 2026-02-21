@@ -14,7 +14,7 @@
                 <span class="footer-logo-text">LABMEB</span>
             </a>
             <p class="footer-description">
-                <?php echo $translations['welcome_text'] ?? 'Ofrecemos soluciones de análisis y laboratorio con tecnología de punta, en alianza directa con CIQTEK.'; ?>
+                <?php echo $translations['welcome_text'] ?? 'Ofrecemos soluciones de análisis y laboratorio con tecnología de punta.'; ?>
             </p>
             <!-- Footer Social -->
             <div class="footer-social">

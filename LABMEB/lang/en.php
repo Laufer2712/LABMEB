@@ -15,12 +15,12 @@ return [
     'learn_more'  => 'See more',
 
     //Search
-    'search_placeholder' => 'Search services, news, etc.',
+    'search_placeholder' => 'Search.',
     'search_button' => 'Search',
 
     // FOOTER
     'welcome_title' => 'Welcome to LABMEB',
-    'welcome_text' => 'We offer laboratory and analysis solutions with cutting-edge technology, in direct partnership with CIQTEK.',
+    'welcome_text' => 'We offer laboratory and analysis solutions with cutting-edge technology.',
     'lab_demo' => 'Demo Laboratory',
     'lab_mobile' => 'Mobile Laboratory',
     'consulting' => 'Consulting',

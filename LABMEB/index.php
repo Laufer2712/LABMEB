@@ -63,17 +63,19 @@
   <section class="intro">
     <h2><?= $translations['welcome_title'] ?></h2>
     <p><?= $translations['welcome_text'] ?></p>
-  </section>
-
-  <!-- Buscador Filtrado-->
-  <section class="search-section">
+    <br>
+    <!-- Buscador Filtrado-->
     <div class="search-box">
       <input type="text" id="searchInput" placeholder="<?= $translations['search_placeholder'] ?>">
       <button id="searchButton"><?= $translations['search_button'] ?></button>
     </div>
 
     <div id="searchResults" class="search-results"></div>
+    <div id="pagination" class="pagination"></div>
   </section>
+
+
+
   <!-- SERVICIOS DESTACADOS -->
   <section class="services-home">
     <div class="service-card">
@@ -146,51 +148,121 @@
     const input = document.getElementById('searchInput');
     const button = document.getElementById('searchButton');
     const container = document.getElementById('searchResults');
+    const paginationContainer = document.getElementById('pagination');
+
+    const resultsPerPage = 9; // 3 filas x 3 columnas
+    let currentPage = 1;
+    let allResults = [];
+    let searchTimeout;
+
+    input.addEventListener('input', function() {
+      clearTimeout(searchTimeout);
+      searchTimeout = setTimeout(() => {
+        if (this.value.length >= 2) searchData();
+        else if (this.value.length === 0) {
+          container.innerHTML = '';
+          paginationContainer.innerHTML = '';
+        }
+      }, 500);
+    });
 
     button.addEventListener('click', searchData);
-    input.addEventListener('keypress', function(e) {
+    input.addEventListener('keypress', e => {
       if (e.key === 'Enter') searchData();
     });
 
     async function searchData() {
       const query = input.value.trim();
-
-      if (!query) {
-        container.innerHTML = '';
+      if (!query || query.length < 2) {
+        container.innerHTML = `<div class="no-results">Ingrese al menos 2 caracteres.</div>`;
+        paginationContainer.innerHTML = '';
         return;
       }
 
-      container.innerHTML = '<div class="no-results">Buscando...</div>';
+      container.innerHTML = '<div class="loading">Buscando...</div>';
+      paginationContainer.innerHTML = '';
 
       try {
         const response = await fetch('api/search.php?q=' + encodeURIComponent(query));
+        if (!response.ok) throw new Error(`Error ${response.status}`);
         const data = await response.json();
 
-        container.innerHTML = '';
-
-        if (!data.length) {
-          container.innerHTML = '<div class="no-results">No se encontraron resultados.</div>';
+        if (!data?.length) {
+          container.innerHTML = `<div class="no-results">No se encontraron resultados para "<strong>${escapeHtml(query)}</strong>".</div>`;
           return;
         }
 
-        data.forEach(item => {
-          const card = document.createElement('div');
-          card.classList.add('result-card');
+        allResults = data;
+        currentPage = 1;
 
-          card.innerHTML = `
-    <h3>${item.institution_name || 'Sin institución'}</h3>
-    <p><strong>Laboratorio:</strong> ${item.laboratory_name || item.specialization || 'N/A'}</p>
-    <p><strong>Equipo:</strong> ${item.equipment_name || 'N/A'}</p>
-    <p><strong>Servicio:</strong> ${item.service_name || 'N/A'}</p>
-    <p><strong>País:</strong> ${item.country_name || 'N/A'}</p>
-  `;
-
-          container.appendChild(card);
-        });
+        renderPage(currentPage);
+        renderPagination();
 
       } catch (error) {
-        container.innerHTML = '<div class="no-results">Error al consultar datos.</div>';
+        container.innerHTML = `<div class="error-message">Error al consultar datos.<br><small>${error.message}</small></div>`;
       }
+    }
+
+    function renderPage(page) {
+      container.innerHTML = '';
+      const start = (page - 1) * resultsPerPage;
+      const pageResults = allResults.slice(start, start + resultsPerPage);
+
+      // Contador
+      const counter = document.createElement('div');
+      counter.classList.add('results-counter');
+      counter.textContent = `Se encontraron ${allResults.length} instituciones`;
+      container.appendChild(counter);
+
+      pageResults.forEach(item => {
+        const card = document.createElement('div');
+        card.classList.add('result-card');
+
+        let equipHtml = item.equipment?.length ? `<div><strong>Equipos:</strong> ${item.equipment.map(e => escapeHtml(e.name)).join(', ')}</div>` : '';
+        let servicesHtml = item.services?.length ? `<div><strong>Servicios:</strong> ${item.services.map(s => escapeHtml(s)).join(', ')}</div>` : '';
+
+        card.innerHTML = `
+        <h3>${escapeHtml(item.institution_name || 'Sin institución')}</h3>
+        <div>${escapeHtml(item.country_name || '')} ${item.state_name ? '- ' + escapeHtml(item.state_name) : ''}</div>
+        ${item.address ? `<div>📍 ${escapeHtml(item.address)}</div>` : ''}
+        ${item.phone ? `<div>📞 ${escapeHtml(item.phone)}</div>` : ''}
+        ${item.email ? `<div>✉️ ${escapeHtml(item.email)}</div>` : ''}
+        ${item.website ? `<div>🌐 ${escapeHtml(item.website)}</div>` : ''}
+        ${equipHtml}
+        ${servicesHtml}
+      `;
+
+        container.appendChild(card);
+      });
+    }
+
+    function renderPagination() {
+      paginationContainer.innerHTML = '';
+      const totalPages = Math.ceil(allResults.length / resultsPerPage);
+      if (totalPages <= 1) return;
+
+      for (let i = 1; i <= totalPages; i++) {
+        const btn = document.createElement('button');
+        btn.textContent = i;
+        if (i === currentPage) btn.classList.add('active');
+        btn.addEventListener('click', () => {
+          currentPage = i;
+          renderPage(currentPage);
+          renderPagination();
+          window.scrollTo({
+            top: container.offsetTop - 100,
+            behavior: 'smooth'
+          });
+        });
+        paginationContainer.appendChild(btn);
+      }
+    }
+
+    function escapeHtml(text) {
+      if (!text) return '';
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
     }
 
   });

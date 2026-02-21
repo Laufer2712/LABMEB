@@ -16,13 +16,13 @@ return [
 
     // FOOTER
     'welcome_title' => 'Bienvenidos a LABMEB',
-    'welcome_text' => 'Ofrecemos soluciones de análisis y laboratorio con tecnología de punta, en alianza directa con CIQTEK.',
+    'welcome_text' => 'Ofrecemos soluciones de análisis y laboratorio con tecnología de punta.',
     'lab_demo' => 'Laboratorio Demo',
     'lab_mobile' => 'Laboratorio Móvil',
     'consulting' => 'Consultoría',
 
     //Buscador
-    'search_placeholder' => 'Buscar servicios, noticias, etc.',
+    'search_placeholder' => 'Buscar.',
     'search_button' => 'Buscar',
 
     // Footer links

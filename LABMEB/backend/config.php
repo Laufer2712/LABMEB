@@ -1,15 +1,22 @@
 <?php
-// db_config.php
-// Configuración de base de datos futura
 
 $host = "localhost";
-$dbname = "labmeb";
-$user = "root";
-$pass = "";
+$dbname = "laboratorios";
+$user = "root";        // cambia esto
+$pass = "";            // cambia esto
 
 try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8", $user, $pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $pdo = new PDO(
+        "mysql:host=$host;dbname=$dbname;charset=utf8mb4",
+        $user,
+        $pass,
+        [
+            PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
+            PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
+            PDO::ATTR_EMULATE_PREPARES => false
+        ]
+    );
 } catch (PDOException $e) {
-    die("Error de conexión: " . $e->getMessage());
+    http_response_code(500);
+    exit("Error de conexión a la base de datos.");
 }
